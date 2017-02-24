@@ -127,7 +127,8 @@ def preprocess():
 
     # Feature selection
     # Your code here.
-
+    # many features which values are exactly the same for all data point
+    # So we can remove those value points since there is nothing to learn from them
     print('preprocess done')
 
     return train_data, train_label, validation_data, validation_label, test_data, test_label
