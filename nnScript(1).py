@@ -12,8 +12,8 @@ def initializeWeights(n_in, n_out):
     # Input:
     # n_in: number of nodes of the input layer
     # n_out: number of nodes of the output layer
-       
-    # Output: 
+
+    # Output:
     # W: matrix of random initial weights with size (n_out x (n_in + 1))"""
 
     epsilon = sqrt(6) / sqrt(n_in + n_out + 1)
@@ -25,7 +25,8 @@ def sigmoid(z):
     """# Notice that z can be a scalar, a vector or a matrix
     # return the sigmoid of input z"""
 
-    return  # your code here
+    #np.exp exponential function imported from numpy
+    return  1 / (1+np.exp(-1*z))
 
 
 def preprocess():
@@ -34,15 +35,15 @@ def preprocess():
      the MNIST data set from file 'mnist_all.mat'.
 
      Output:
-     train_data: matrix of training set. Each row of train_data contains 
+     train_data: matrix of training set. Each row of train_data contains
        feature vector of a image
      train_label: vector of label corresponding to each image in the training
        set
-     validation_data: matrix of training set. Each row of validation_data 
+     validation_data: matrix of training set. Each row of validation_data
        contains feature vector of a image
-     validation_label: vector of label corresponding to each image in the 
+     validation_label: vector of label corresponding to each image in the
        training set
-     test_data: matrix of training set. Each row of test_data contains 
+     test_data: matrix of training set. Each row of test_data contains
        feature vector of a image
      test_label: vector of label corresponding to each image in the testing
        set
@@ -133,9 +134,9 @@ def preprocess():
 
 
 def nnObjFunction(params, *args):
-    """% nnObjFunction computes the value of objective function (negative log 
-    %   likelihood error function with regularization) given the parameters 
-    %   of Neural Networks, thetraining data, their corresponding training 
+    """% nnObjFunction computes the value of objective function (negative log
+    %   likelihood error function with regularization) given the parameters
+    %   of Neural Networks, thetraining data, their corresponding training
     %   labels and lambda - regularization hyper-parameter.
 
     % Input:
@@ -153,8 +154,8 @@ def nnObjFunction(params, *args):
     %     in the vector represents the truth label of its corresponding image.
     % lambda: regularization hyper-parameter. This value is used for fixing the
     %     overfitting problem.
-       
-    % Output: 
+
+    % Output:
     % obj_val: a scalar value representing value of error function
     % obj_grad: a SINGLE vector of gradient value of error function
     % NOTE: how to compute obj_grad
@@ -164,10 +165,10 @@ def nnObjFunction(params, *args):
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % reshape 'params' vector into 2 matrices of weight w1 and w2
     % w1: matrix of weights of connections from input layer to hidden layers.
-    %     w1(i, j) represents the weight of connection from unit j in input 
+    %     w1(i, j) represents the weight of connection from unit j in input
     %     layer to unit i in hidden layer.
     % w2: matrix of weights of connections from hidden layer to output layers.
-    %     w2(i, j) represents the weight of connection from unit j in hidden 
+    %     w2(i, j) represents the weight of connection from unit j in hidden
     %     layer to unit i in output layer."""
 
     n_input, n_hidden, n_class, training_data, training_label, lambdaval = args
@@ -199,15 +200,15 @@ def nnPredict(w1, w2, data):
 
     % Input:
     % w1: matrix of weights of connections from input layer to hidden layers.
-    %     w1(i, j) represents the weight of connection from unit i in input 
+    %     w1(i, j) represents the weight of connection from unit i in input
     %     layer to unit j in hidden layer.
     % w2: matrix of weights of connections from hidden layer to output layers.
-    %     w2(i, j) represents the weight of connection from unit i in input 
+    %     w2(i, j) represents the weight of connection from unit i in input
     %     layer to unit j in hidden layer.
-    % data: matrix of data. Each row of this matrix represents the feature 
+    % data: matrix of data. Each row of this matrix represents the feature
     %       vector of a particular image
-       
-    % Output: 
+
+    % Output:
     % label: a column vector of predicted labels"""
 
     labels = np.array([])
