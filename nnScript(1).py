@@ -26,7 +26,7 @@ def sigmoid(z):
     # return the sigmoid of input z"""
 
     #np.exp exponential function imported from numpy
-    return  1 / (1+np.exp(-1*z))
+    return 1.0 / (1.0 + np.exp(-1.0 * z))
 
 
 def preprocess():
@@ -127,9 +127,21 @@ def preprocess():
 
     # Feature selection
     # Your code here.
-    # many features which values are exactly the same for all data point
-    # So we can remove those value points since there is nothing to learn from them
+    """ many features which values are exactly the same for all data point
+     So we can remove those value points since there is nothing to learn from them"""
     print('preprocess done')
+    #print test_data
+    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+    for row in test_data:
+        print row
+        if any(row) == any(row):
+            del row
+        """NOt sure this actually removes what we want it to and im not sure how to test if it does"""
+
+    # for row in test_data:
+    #     for i in row:
+    #         if row[i] == row[i+1]:
+    #             row[i] = -1.0
 
     return train_data, train_label, validation_data, validation_label, test_data, test_label
 
