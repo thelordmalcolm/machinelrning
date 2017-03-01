@@ -138,9 +138,14 @@ def preprocess():
         if any(row) == any(row):
             del row
         NOt sure this actually removes what we want it to and im not sure how to test if it does"""
-
-    numpy.unique(train_label)
-
+    print(train_label, "pre")
+    i = 0
+    while i < test_data.shape[1]:
+        if len(np.unique(test_data[:, i])) < 2:
+            np.delete(test_data, i, 1)
+            print(i)
+        i += 1
+    print(train_label, "post")
 
     return train_data, train_label, validation_data, validation_label, test_data, test_label
 
