@@ -1,4 +1,3 @@
-import numpy
 import numpy as np
 from scipy.optimize import minimize
 from scipy.io import loadmat
@@ -146,16 +145,25 @@ def preprocess():
     #     i += 1
 
     count = []
-    x = len(test_data)
+    x = len(test_data[1])
     i = 0
-    while i < x:
-        if np.std(test_data[:, i]) < .05:
-            np.delete(test_data, test_data[:, 1])
-            count.append(i)
-            x -= 1
-        i += 1
+    print(x)
+    while i != x:
+        try:
+            #print(x, '   i   ', i)
+            if np.std(test_data[:, i]) < .05:
+                np.delete(test_data, (test_data[:, 1]))
+                count.append(i)
+                x -= 1
+            i += 1
+        except:
+            print(i, '   x   ', x, '    kfjdlasjk  ' ,len(test_data))
+            break
+    print(count, "count\n\n\n\n\n\n\n\n")
 
-    print(count, "count")
+    print(test_data[1])
+    print()
+
 
 
 
