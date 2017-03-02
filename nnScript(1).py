@@ -138,14 +138,28 @@ def preprocess():
         if any(row) == any(row):
             del row
         NOt sure this actually removes what we want it to and im not sure how to test if it does"""
-    print(train_label, "pre")
+    # i = 0
+    # while i < test_data.shape[1]:
+    #     if len(np.unique(test_data[:, i])) < 2:
+    #         np.delete(test_data, i, 1)
+    #         print(test_data, "%%%%%%%%%%%%%%%%%%%%%%")
+    #     i += 1
+
+    count = []
+    x = len(test_data)
     i = 0
-    while i < test_data.shape[1]:
-        if len(np.unique(test_data[:, i])) < 2:
-            np.delete(test_data, i, 1)
-            print(i)
+    while i < x:
+        if np.std(test_data[:, i]) < .05:
+            np.delete(test_data, test_data[:, 1])
+            count.append(i)
+            x -= 1
         i += 1
-    print(train_label, "post")
+
+    print(count, "count")
+
+
+
+
 
     return train_data, train_label, validation_data, validation_label, test_data, test_label
 
