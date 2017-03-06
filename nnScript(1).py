@@ -140,18 +140,45 @@ def preprocess():
     count = []
     x = len(test_data[1])
     i = 0
+
     print(x)
+    #print(np.std(test_data[:, i]))
+    print(np.average(test_data))
+    print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+    #print(np.std(train_data[:, i]))
+    print(np.average(train_data))
+    print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+    print(np.average(validation_data))
+    print('################################')
+    stddev = 0.129
     while i != x:
-        if np.std(test_data[:, i]) < .05:
+        '''print(np.std(test_data[:, i]))
+        print(np.average(test_data[:, i]))
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        print(np.std(train_data[:, i]))
+        print(np.average(train_data[:, i]))
+        print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+        print(np.std(validation_data[:, i]))
+        print(np.average(validation_data[:, i]))
+        print('################################')'''
+        if np.std(test_data[:, i]) < stddev and np.std(train_data[:, i]) < stddev and np.std(validation_data[:, i]) < stddev:
             #np.delete(test_data, (test_data[:, 1]))
             count.append(i)
-            x -= 1
+            #x -= 1
         i += 1
 
     train_data = np.delete(train_data, count, axis = 1)
     validation_data = np.delete(validation_data, count, axis = 1)
     test_data = np.delete(test_data, count, axis = 1)
-
+    '''for i in range(len(test_data)):
+        print(np.std(test_data[:, i]), np.std(train_data[:, i]), np.std(validation_data[:, i]))'''
+    print(np.average(test_data))
+    print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+    #print(np.std(train_data[:, i]))
+    print(np.average(train_data))
+    print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+    print(np.average(validation_data))
+    print('################################')
     print(len(test_data[0]))
     print(len(validation_data[0]))
     print(len(train_data[0]))
