@@ -135,37 +135,26 @@ def preprocess():
     for row in test_data:
         print row
         if any(row) == any(row):
-            del row
-        NOt sure this actually removes what we want it to and im not sure how to test if it does"""
-    # i = 0
-    # while i < test_data.shape[1]:
-    #     if len(np.unique(test_data[:, i])) < 2:
-    #         np.delete(test_data, i, 1)
-    #         print(test_data, "%%%%%%%%%%%%%%%%%%%%%%")
-    #     i += 1
+            del row"""
 
     count = []
     x = len(test_data[1])
     i = 0
     print(x)
     while i != x:
-        try:
-            #print(x, '   i   ', i)
-            if np.std(test_data[:, i]) < .05:
-                np.delete(test_data, (test_data[:, 1]))
-                count.append(i)
-                x -= 1
-            i += 1
-        except:
-            print(i, '   x   ', x, '    kfjdlasjk  ' ,len(test_data))
-            break
-    print(count, "count\n\n\n\n\n\n\n\n")
+        if np.std(test_data[:, i]) < .05:
+            #np.delete(test_data, (test_data[:, 1]))
+            count.append(i)
+            x -= 1
+        i += 1
 
-    print(test_data[1])
-    print()
+    train_data = np.delete(train_data, count, axis = 1)
+    validation_data = np.delete(validation_data, count, axis = 1)
+    test_data = np.delete(test_data, count, axis = 1)
 
-
-
+    print(len(test_data[0]))
+    print(len(validation_data[0]))
+    print(len(train_data[0]))
 
 
 
