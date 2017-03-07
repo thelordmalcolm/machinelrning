@@ -140,7 +140,6 @@ def preprocess():
     count = []
     x = len(test_data[1])
     i = 0
-    print(x)
     while i != x:
         if np.std(test_data[:, i]) < .05:
             # np.delete(test_data, (test_data[:, 1]))
@@ -204,25 +203,35 @@ def nnObjFunction(params, *args):
     w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
     obj_val = 0
-    n = len(train_data)
-
-    a_j = np.dot(n_input, np.transpose(w1))
+    n = len(training_data)
+    training_data = np.ones((training_data.shape[0], 1))
+    np.append(training_data, training_data, axis=1)
+    a_j = np.dot(training_data, np.transpose(w1))
     z_j = sigmoid(a_j)
     bias = np.ones((z_j.shape[0], 1))
     z_j = np.append(z_j, bias, axis=1)
     b_l = np.dot(w2, np.transpose(z_j))
+
     o_l = sigmoid(b_l)
+    print(o_l)
     obj_val = (-1 * 1 / n) * np.sum(
         np.sum((training_label.shape * np.log(o_l) + (np.subtract(1, training_label.shape)) * (np.log(1 - o_l)))))
-
     delta_l = np.subtract(o_l, training_label.shape)
-    eq_9 = np.outer(delta_l, z_j)
-    eq_12 = np.multiply(
+    eq_9w2 = np.outer(delta_l, z_j)
+    eq_12w1 = np.multiply(
         np.multiply(
             np.multiply(
                 np.subtract(1, z_j), z_j), n_input), np.dot(np.transpose(delta_l), w2))
-    print(eq_9)
-    print(eq_12)
+
+    sum1 = np.sum(np.square(w1))
+    sum2 = np.sum(np.square(w2))
+
+    j = obj_val + ((lambdaval / (2 * n)) * (sum1 + sum2))
+
+    obj_val = j
+
+    eq_9w2 = (np.sum(eq_9w2,  (lambdaval * w2))) / n
+    eq_12w1 = (np.sum(eq_12w1, (lambdaval * w1))) / n
 
     # Your code here
     #
@@ -237,8 +246,8 @@ def nnObjFunction(params, *args):
     # Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
     # you would use code similar to the one below to create a flat array
     # obj_grad = np.concatenate((grad_w1.flatten(), grad_w2.flatten()),0)
-    obj_grad = np.array([])
-
+    obj_grad = np.concatenate((eq_9w2.flatten(), eq_12w1.flatten(), 0))
+    print(obj_grad)
     return (obj_val, obj_grad)
 
 
@@ -261,6 +270,31 @@ def nnPredict(w1, w2, data):
 
     labels = np.array([])
     # Your code here
+
+    for i in range(len(data)):
+        out = np.zeros(n_class)
+        bias = np.ones(1)
+        training = np.concatenate((data[i], bias))
+        h_layer = np.dot(w1, training)
+
+        h_layer = sigmoid(h_layer)
+
+        h_layer = np.concatenate(h_layer, bias)
+
+        o_layer = np.dot(w2, h_layer)
+
+        out = sigmoid(o_layer)
+
+        x = 0
+        z = 0
+
+        for y in range(n_class):
+            if out[y] > x:
+                x = out[y]
+                z = 1
+        labels[i] = float(z)
+
+    print(labels)
 
     return labels
 
