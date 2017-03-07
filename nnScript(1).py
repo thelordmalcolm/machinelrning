@@ -25,7 +25,7 @@ def sigmoid(z):
     """# Notice that z can be a scalar, a vector or a matrix
     # return the sigmoid of input z"""
 
-    #np.exp exponential function imported from numpy
+    # np.exp exponential function imported from numpy
     return 1.0 / (1.0 + np.exp(-1.0 * z))
 
 
@@ -140,48 +140,21 @@ def preprocess():
     count = []
     x = len(test_data[1])
     i = 0
-
     print(x)
-    #print(np.std(test_data[:, i]))
-    print(np.average(test_data))
-    print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-    #print(np.std(train_data[:, i]))
-    print(np.average(train_data))
-    print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-    print(np.average(validation_data))
-    print('################################')
-    stddev = 0.129
     while i != x:
-        '''print(np.std(test_data[:, i]))
-        print(np.average(test_data[:, i]))
-        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-        print(np.std(train_data[:, i]))
-        print(np.average(train_data[:, i]))
-        print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-        print(np.std(validation_data[:, i]))
-        print(np.average(validation_data[:, i]))
-        print('################################')'''
-        if np.std(test_data[:, i]) < stddev and np.std(train_data[:, i]) < stddev and np.std(validation_data[:, i]) < stddev:
-            #np.delete(test_data, (test_data[:, 1]))
+        if np.std(test_data[:, i]) < .05:
+            # np.delete(test_data, (test_data[:, 1]))
             count.append(i)
-            #x -= 1
+            x -= 1
         i += 1
 
-    train_data = np.delete(train_data, count, axis = 1)
-    validation_data = np.delete(validation_data, count, axis = 1)
-    test_data = np.delete(test_data, count, axis = 1)
-    '''for i in range(len(test_data)):
-        print(np.std(test_data[:, i]), np.std(train_data[:, i]), np.std(validation_data[:, i]))'''
-    print(np.average(test_data))
-    print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-    #print(np.std(train_data[:, i]))
-    print(np.average(train_data))
-    print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-    print(np.average(validation_data))
-    print('################################')
-    print(len(test_data[0]))
-    print(len(validation_data[0]))
-    print(len(train_data[0]))
+    train_data = np.delete(train_data, count, axis=1)
+    validation_data = np.delete(validation_data, count, axis=1)
+    test_data = np.delete(test_data, count, axis=1)
+
+    # print(len(test_data[0]))
+    # print(len(validation_data[0]))
+    # print(len(train_data[0]))
 
 
 
@@ -231,6 +204,25 @@ def nnObjFunction(params, *args):
     w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
     obj_val = 0
+    n = len(train_data)
+
+    a_j = np.dot(n_input, np.transpose(w1))
+    z_j = sigmoid(a_j)
+    bias = np.ones((z_j.shape[0], 1))
+    z_j = np.append(z_j, bias, axis=1)
+    b_l = np.dot(w2, np.transpose(z_j))
+    o_l = sigmoid(b_l)
+    obj_val = (-1 * 1 / n) * np.sum(
+        np.sum((training_label.shape * np.log(o_l) + (np.subtract(1, training_label.shape)) * (np.log(1 - o_l)))))
+
+    delta_l = np.subtract(o_l, training_label.shape)
+    eq_9 = np.outer(delta_l, z_j)
+    eq_12 = np.multiply(
+        np.multiply(
+            np.multiply(
+                np.subtract(1, z_j), z_j), n_input), np.dot(np.transpose(delta_l), w2))
+    print(eq_9)
+    print(eq_12)
 
     # Your code here
     #
@@ -238,6 +230,7 @@ def nnObjFunction(params, *args):
     #
     #
     #
+
 
 
 
