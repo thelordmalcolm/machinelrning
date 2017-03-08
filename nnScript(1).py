@@ -2,7 +2,8 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.io import loadmat
 from math import sqrt
-
+import matplotlib.pyplot as plt
+#matplotlib inline
 
 def initializeWeights(n_in, n_out):
     """
@@ -196,7 +197,7 @@ def nnObjFunction(params, *args):
     %     w2(i, j) represents the weight of connection from unit j in hidden
     %     layer to unit i in output layer."""
 
-    n_input, n_hidden, n_class, training_data, training_label, lambdaval = args
+    n_input, n_hidden, n_class, training_data, t_label, lambdaval = args
     w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
     obj_val = 0
@@ -232,12 +233,7 @@ def nnObjFunction(params, *args):
     eq_12w1 = (np.sum(eq_12w1, (lambdaval * w1))) / n'''
 
     # Your code here
-    #
-    #
-    #
-    #
-    #
-    training_label = training_label.astype(int)
+    t_label = t_label.astype(int)
     #print(training_label)
     n = len(training_data)
     w1_g = np.zeros((n,n_hidden+1))
@@ -251,8 +247,10 @@ def nnObjFunction(params, *args):
     yp = np.zeros((n,n_class))
     l_en = np.identity((n_class))
     t_en = np.identity(2)
-    for index in range(n):
-        yp[index] = l_en[training_label[index]]
+    index = 0
+    while index < (n):
+        yp[index] = l_en[t_label[index]]
+        index += 1
     y = np.multiply(yp, np.log(i_out)) + np.multiply((1 - yp) , np.log(1 - i_out))
     orange_juice = np.sum(-y) / n
     a_s = i_out-yp
@@ -265,7 +263,7 @@ def nnObjFunction(params, *args):
     sum1 = np.sum(np.square(w1))
     sum2 = np.sum(np.square(w2))
     #print('orange juice', orange_juice)
-    obj_val = orange_juice + np.multiply((lambdaval/(2*n)), (sum1 + sum2))
+    obj_val = orange_juice + np.multiply((lambdaval/np.multiply(2,n)), (sum1 + sum2))
     #print(obj_val)
     g1 = (g1 + np.multiply(lambdaval, w1))/n
     g2 = (g2 + np.multiply(lambdaval, w2))/n
@@ -280,64 +278,51 @@ def nnObjFunction(params, *args):
 def nnPredict(w1, w2, data):
     """% nnPredict predicts the label of data given the parameter w1, w2 of Neural
     % Network.
-
     % Input:
     % w1: matrix of weights of connections from input layer to hidden layers.
-    %     w1(i, j) represents the weight of connection from unit i in input
+    %     w1(i, j) represents the weight of connection from unit j in input
     %     layer to unit j in hidden layer.
     % w2: matrix of weights of connections from hidden layer to output layers.
-    %     w2(i, j) represents the weight of connection from unit i in input
+    %     w2(i, j) represents the weight of connection from unit j in input
     %     layer to unit j in hidden layer.
     % data: matrix of data. Each row of this matrix represents the feature
     %       vector of a particular image
 
     % Output:
-    % label: a column vector of predicted labels"""
+    % labels: a column vector of predicted labels"""
+    data_size = len(data)
+    labels = np.ones(data_size)
+    i = 0
+    #print(data_size)
+    while i < data_size:
+        o= np.zeros(n_class)
+        bias = np.array([1])
+        t = np.concatenate((data[i], bias))
 
-    labels = np.array([])
-    # Your code here
+        escondido = np.dot(w1, t)
+        index = 0
+        while index < len(escondido):
+            escondido[index] = sigmoid(escondido[index])
+            index += 1
 
-    for i in range(len(data)):
-        out = np.zeros(n_class)
-        bias = np.ones(1)
-        training = np.concatenate((data[i], bias))
-        h_layer = np.dot(w1, training)
+        secret = np.concatenate((escondido, bias))
 
-        h_layer = sigmoid(h_layer)
-
-        h_layer = np.concatenate(h_layer, bias)
-
-        o_layer = np.dot(w2, h_layer)
-
-        out = sigmoid(o_layer)
-
-        x = 0
-        z = 0
-
-        for y in range(n_class):
-            if out[y] > x:
-                x = out[y]
-                z = 1
-        labels[i] = float(z)
-
-    print(labels)
-
+        fuera = np.dot(w2, secret)
+        top = 0
+        test = 0
+        index2 = 0
+        while index2 < (n_class):
+            o[index2] = sigmoid(fuera[index2])
+            if o[index2] > top:
+                top = o[index2]
+                test = index2
+            index2 += 1
+        labels[i] = float(test)
+        i += 1
     return labels
-
 
 """**************Neural Network Script Starts here********************************"""
 
-n_input = 5
-n_hidden = 3
-n_class = 2
-training_data = np.array([np.linspace(0,1,num=5),np.linspace(1,0,num=5)])
-training_label = np.array([0,1])
-lambdaval = 0
-params = np.linspace(-5,5, num=26)
-args = (n_input, n_hidden, n_class, training_data, training_label, lambdaval)
-objval,objgrad = nnObjFunction(params, *args)
-print(objval)
-print(objgrad)
 
 train_data, train_label, validation_data, validation_label, test_data, test_label = preprocess()
 
