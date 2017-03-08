@@ -1,0 +1,5 @@
+obj = [count, n_hidden, w1, w2, lambdaval]
+# selected_features is a list of feature indices that you use after removing unwanted features in feature selection step
+import pickle
+
+pickle.dump(obj, open('params.pickle', 'wb'))

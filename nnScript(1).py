@@ -2,8 +2,6 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.io import loadmat
 from math import sqrt
-import matplotlib.pyplot as plt
-#matplotlib inline
 
 def initializeWeights(n_in, n_out):
     """
