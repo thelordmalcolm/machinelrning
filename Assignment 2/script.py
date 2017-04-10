@@ -123,14 +123,18 @@ def qdaTest(means, covmats, Xtest, ytest):
     return acc, ypred
 
 
-def learnOLERegression(X, y):
-    # Inputs:
-    # X = N x d
-    # y = N x 1
-    # Output:
-    # w = d x 1
-
-    # IMPLEMENT THIS METHOD
+def learnOLERegression(X,y):
+    # Inputs:                                                         
+    # X = N x d 
+    # y = N x 1                                                               
+    # Output: 
+    # w = d x 1 
+    
+    # IMPLEMENT THIS METHOD 
+    #returns the dotrabs the dot product of inverse of 
+    transposeX = np.dot(X.transpose(),X)
+    transposeY = np.dot(Y.transpose(),y)
+    w = np.dot(np.linalg.inv(transposeX),transposeY)                                                  
     return w
 
 
@@ -146,15 +150,18 @@ def learnRidgeRegression(X, y, lambd):
     return w
 
 
-def testOLERegression(w, Xtest, ytest):
+def testOLERegression(w,Xtest,ytest):
     # Inputs:
     # w = d x 1
     # Xtest = N x d
     # ytest = X x 1
     # Output:
     # mse
-
+    
     # IMPLEMENT THIS METHOD
+    somew = w.reshape((w.shape[0],1))
+    newW = np.sum(np.square((ytest-np.dot(Xtest,somew))))
+    mse = (1.0/Xtest.shape[0]) * np.sqrt(newW)
     return mse
 
 
@@ -167,14 +174,17 @@ def regressionObjVal(w, X, y, lambd):
     return error, error_grad
 
 
-def mapNonLinear(x, p):
-    # Inputs:
-    # x - a single column vector (N x 1)
-    # p - integer (>= 0)
-    # Outputs:
-    # Xd - (N x (d+1))
-
+def mapNonLinear(x,p):
+    # Inputs:                                                                  
+    # x - a single column vector (N x 1)                                       
+    # p - integer (>= 0)                                                       
+    # Outputs:                                                                 
+    # Xd - (N x (d+1)) 
     # IMPLEMENT THIS METHOD
+    Xd = np.ones((x.shape[0], p+1))
+    for i in range(1, p + 1):
+        Xd[:, i] = pow(x, i)
+    
     return Xd
 
 
