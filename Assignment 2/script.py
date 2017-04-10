@@ -24,7 +24,7 @@ def ldaLearn(X, y):
     for i in np.unique(y).astype(int):
         means[:, i - 1] = np.mean(X[np.where(y == i)[0], :], axis=0).transpose()
     covmat = np.cov(np.transpose(X))
-    #print(means, '\n',covmat)
+    # print(means, '\n',covmat)
     return means, covmat
 
 
@@ -44,7 +44,7 @@ def qdaLearn(X, y):
     for i in np.unique(y).astype(int):
         means[:, i - 1] = np.mean(X[np.where(y == i)[0], :], axis=0).transpose()
         covmats.append(np.cov(X[np.where(y == i)[0], :].transpose()))
-    #print(means, '\n',covmats)
+    # print(means, '\n',covmats)
     return means, covmats
 
 
@@ -65,17 +65,21 @@ def ldaTest(means, covmat, Xtest, ytest):
     const = 1 / (sqrt(np.power(2 * np.pi, Xtest.shape[1]))) * sqrt(det(covmat))
     # print(ytest)
     pred = 0.
-    for i in range(Xtest.shape[0]):
+    i = 0
+    while i < (Xtest.shape[0]):
         plist = []
-        for j in range(kClass):
+        j = 0
+        while j < (kClass):
             row = np.transpose(Xtest[i, :]) - means[:, j]
             res = const * np.exp(-0.5 * np.dot(np.dot(np.transpose(row), inverse), row))
             (plist.append(res))
+            j += 1
         pred = max(plist)
         pred = (plist.index(pred))
-        if (pred == ytest[i]-1):
+        if (pred == ytest[i] - 1):
             acc += 1.
         ypred[i] = pred
+        i += 1
     acc /= Xtest.shape[0]
     return acc, ypred
 
@@ -99,10 +103,10 @@ def qdaTest(means, covmats, Xtest, ytest):
         inverse[i] = inv(covmats[i])
         i += 1
     constants = np.empty(kClass)
-    const = sqrt(np.power((2*np.pi), Xtest.shape[1]))
+    const = sqrt(np.power((2 * np.pi), Xtest.shape[1]))
     i = 0
     while i < (kClass):
-        constants[i] = 1/const * sqrt(det(covmats[i]))
+        constants[i] = 1 / const * sqrt(det(covmats[i]))
         i += 1
     i = 0
     while i < (Xtest.shape[0]):
@@ -115,7 +119,7 @@ def qdaTest(means, covmats, Xtest, ytest):
             j += 1
         pred = max(plist)
         pred = int(plist.index(pred))
-        if(pred == ytest[i]-1):
+        if (pred == ytest[i] - 1):
             acc += 1
         ypred[i] = pred
         i += 1
@@ -123,18 +127,18 @@ def qdaTest(means, covmats, Xtest, ytest):
     return acc, ypred
 
 
-def learnOLERegression(X,y):
-    # Inputs:                                                         
-    # X = N x d 
-    # y = N x 1                                                               
-    # Output: 
-    # w = d x 1 
-    
-    # IMPLEMENT THIS METHOD 
-    #returns the dotrabs the dot product of inverse of 
-    transposeX = np.dot(X.transpose(),X)
-    transposeY = np.dot(X.transpose(),y)
-    w = np.dot(np.linalg.inv(transposeX),transposeY)                                                  
+def learnOLERegression(X, y):
+    # Inputs:
+    # X = N x d
+    # y = N x 1
+    # Output:
+    # w = d x 1
+
+    # IMPLEMENT THIS METHOD
+    # returns the dotrabs the dot product of inverse of
+    transposeX = np.dot(X.transpose(), X)
+    transposeY = np.dot(X.transpose(), y)
+    w = np.dot(inv(transposeX), transposeY)
     return w
 
 
@@ -147,22 +151,29 @@ def learnRidgeRegression(X, y, lambd):
     # w = d x 1
 
     # IMPLEMENT THIS METHOD
+    id = np.identity(X.shape[1])
+    id = lambd*id
+    w = np.dot(inv(np.dot(X.transpose(), X) + id), np.dot(X.transpose(), y))
     return w
 
 
-def testOLERegression(w,Xtest,ytest):
+def testOLERegression(w, Xtest, ytest):
     # Inputs:
     # w = d x 1
     # Xtest = N x d
     # ytest = X x 1
     # Output:
     # mse
-    
+
     # IMPLEMENT THIS METHOD
-    somew = w.reshape((w.shape[0],1))
-    newW = np.sum(np.square((ytest-np.dot(Xtest,somew))))
-    mse = (1.0/Xtest.shape[0]) * np.sqrt(newW)
+
+    #mse = np.sqrt(np.sum(np.square(ytest - np.dot(XTest, w)))/Xtest.shape[0])
+
+    somew = w.reshape((w.shape[0], 1))
+    newW = np.sum(np.square((ytest - np.dot(Xtest, somew))))
+    mse = (1.0 / Xtest.shape[0]) * (newW)
     return mse
+
 
 def squareandsum(val):
     sqr = np.square(val)
@@ -170,26 +181,30 @@ def squareandsum(val):
     sqroot = np.sqrt(summ)
     return sqrt
 
+
 def regressionObjVal(w, X, y, lambd):
     # compute squared error (scalar) and gradient of squared error with respect
     # to w (vector) for the given data X and y and the regularization parameter
     # lambda
 
     # IMPLEMENT THIS METHOD
+    error = np.sum(np.square((y - np.dot(X, w.reshape((w.shape[0], 1))))))
+    gradience = np.dot(-1, np.dot(X.transpose(), (y - np.dot(X, w.reshape((w.shape[0], 1))))))
+    error_grad = gradience[:, 0] + np.dot(lambd, w)
     return error, error_grad
 
 
-def mapNonLinear(x,p):
-    # Inputs:                                                                  
-    # x - a single column vector (N x 1)                                       
-    # p - integer (>= 0)                                                       
-    # Outputs:                                                                 
-    # Xd - (N x (d+1)) 
+def mapNonLinear(x, p):
+    # Inputs:
+    # x - a single column vector (N x 1)
+    # p - integer (>= 0)
+    # Outputs:
+    # Xd - (N x (d+1))
     # IMPLEMENT THIS METHOD
-    Xd = np.ones((x.shape[0], p+1))
+    Xd = np.ones((x.shape[0], p + 1))
     for i in range(1, p + 1):
         Xd[:, i] = pow(x, i)
-    
+
     return Xd
 
 
@@ -204,8 +219,8 @@ else:
 
 # LDA
 means, covmat = ldaLearn(X, y)
-ldaacc,ldares = ldaTest(means,covmat,Xtest,ytest)
-print('LDA Accuracy = '+str(ldaacc))
+ldaacc, ldares = ldaTest(means, covmat, Xtest, ytest)
+print('LDA Accuracy = ' + str(ldaacc))
 # QDA
 means, covmats = qdaLearn(X, y)
 qdaacc, qdares = qdaTest(means, covmats, Xtest, ytest)
