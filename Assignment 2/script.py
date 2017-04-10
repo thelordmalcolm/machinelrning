@@ -133,7 +133,7 @@ def learnOLERegression(X,y):
     # IMPLEMENT THIS METHOD 
     #returns the dotrabs the dot product of inverse of 
     transposeX = np.dot(X.transpose(),X)
-    transposeY = np.dot(Y.transpose(),y)
+    transposeY = np.dot(X.transpose(),y)
     w = np.dot(np.linalg.inv(transposeX),transposeY)                                                  
     return w
 
@@ -160,10 +160,12 @@ def testOLERegression(w,Xtest,ytest):
     
     # IMPLEMENT THIS METHOD
     someVal = Xtest.shape[0]
-    m = np.transpose(ytest-np.dot(xTest,w))
+    thedot = np.dot(Xtest,w)
+    m = (ytest - thedot)
+    j = np.transpose(m)
+    mse = np.sum(np.dot(j,m))
     
-    retVal = squareandsum(m)
-    mse = retVal/someVal
+    mse = sqrt(mse/someVal)
     return mse
 
 def squareandsum(val):
