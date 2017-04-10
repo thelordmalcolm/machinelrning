@@ -159,11 +159,18 @@ def testOLERegression(w,Xtest,ytest):
     # mse
     
     # IMPLEMENT THIS METHOD
-    somew = w.reshape((w.shape[0],1))
-    newW = np.sum(np.square((ytest-np.dot(Xtest,somew))))
-    mse = (1.0/Xtest.shape[0]) * np.sqrt(newW)
+    someVal = Xtest.shape[0]
+    m = np.transpose(ytest-np.dot(xTest,w))
+    
+    retVal = squareandsum(m)
+    mse = retVal/someVal
     return mse
 
+def squareandsum(val):
+    sqr = np.square(val)
+    summ = np.sum(sqr)
+    sqroot = np.sqrt(summ)
+    return sqrt
 
 def regressionObjVal(w, X, y, lambd):
     # compute squared error (scalar) and gradient of squared error with respect
