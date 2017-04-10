@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 import pickle
 import sys
 
-def ldaLearn(X,y):
+
+def ldaLearn(X, y):
     # Inputs
     # X - a N x d matrix with each row corresponding to a training example
     # y - a N x 1 column vector indicating the labels for each training example
@@ -16,9 +17,11 @@ def ldaLearn(X,y):
     # Outputs
     # means - A d x k matrix containing learnt means for each of the k classes
     # covmat - A single d x d learnt covariance matrix 
-    
-    # IMPLEMENT THIS METHOD 
-    return means,covmat
+
+    # IMPLEMENT THIS METHOD
+    means = np.zeros((np.shape(X)[1], np.amax(y)))
+    covmat = np.cov(np.transpose(X))
+    return means, covmat
 
 def qdaLearn(X,y):
     # Inputs
