@@ -19,8 +19,12 @@ def ldaLearn(X, y):
     # covmat - A single d x d learnt covariance matrix 
 
     # IMPLEMENT THIS METHOD
-    means = np.zeros((np.shape(X)[1], np.amax(y)))
+    means = np.zeros((np.shape(X)[1], np.amax(y).astype(int)))
+
+    for i in np.unique(y).astype(int):
+        means[:,i-1] = np.mean(X[np.where(y == i)[0], :], axis=0).transpose()
     covmat = np.cov(np.transpose(X))
+
     return means, covmat
 
 def qdaLearn(X,y):
@@ -33,6 +37,13 @@ def qdaLearn(X,y):
     # covmats - A list of k d x d learnt covariance matrices for each of the k classes
     
     # IMPLEMENT THIS METHOD
+    covmats = []
+    means = np.zeros((np.shape(X)[1], np.amax(y).astype(int)))
+
+    for i in np.unique(y).astype(int):
+        means[:, i - 1] = np.mean(X[np.where(y == i)[0], :], axis=0).transpose()
+        covmats.append(np.cov(X[np.where(y == i)[0], :].transpose()))
+
     return means,covmats
 
 def ldaTest(means,covmat,Xtest,ytest):
@@ -121,8 +132,8 @@ else:
 
 # LDA
 means,covmat = ldaLearn(X,y)
-ldaacc,ldares = ldaTest(means,covmat,Xtest,ytest)
-print('LDA Accuracy = '+str(ldaacc))
+#ldaacc,ldares = ldaTest(means,covmat,Xtest,ytest)
+#print('LDA Accuracy = '+str(ldaacc))
 # QDA
 means,covmats = qdaLearn(X,y)
 qdaacc,qdares = qdaTest(means,covmats,Xtest,ytest)
