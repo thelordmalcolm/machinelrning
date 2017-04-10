@@ -159,13 +159,9 @@ def testOLERegression(w,Xtest,ytest):
     # mse
     
     # IMPLEMENT THIS METHOD
-    someVal = Xtest.shape[0]
-    thedot = np.dot(Xtest,w)
-    m = (ytest - thedot)
-    j = np.transpose(m)
-    mse = np.sum(np.dot(j,m))
-    
-    mse = sqrt(mse/someVal)
+    somew = w.reshape((w.shape[0],1))
+    newW = np.sum(np.square((ytest-np.dot(Xtest,somew))))
+    mse = (1.0/Xtest.shape[0]) * np.sqrt(newW)
     return mse
 
 def squareandsum(val):
