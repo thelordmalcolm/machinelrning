@@ -56,7 +56,27 @@ def ldaTest(means,covmat,Xtest,ytest):
     # ypred - N x 1 column vector indicating the predicted labels
 
     # IMPLEMENT THIS METHOD
-    return acc,ypred
+    acc = 0.
+    kClass = means.shape[1]
+    ypred = np.zeros((Xtest.shape[0], 1))
+    inverse = inv(covmat)
+    const = 1 / (sqrt(np.power(2 * np.pi, Xtest.shape[1]))) * sqrt(det(covmat))
+    # print(ytest)
+    for i in range(Xtest.shape[0]):
+        plist = []
+        for j in range(kClass):
+            row = np.transpose(Xtest[i, :]) - means[:, j]
+            res = const * np.exp(-0.5 * np.dot(np.dot(np.transpose(row), inverse), row))
+            (plist.append(res))
+        # print(len(plist))
+        pred = max(plist)
+        pred = plist.index(pred)
+        if (ytest[i] == pred):
+            acc += 1
+        ypred[i] = pred
+    acc /= Xtest.shape[0]
+    print(acc)
+    return acc, ypred
 
 def qdaTest(means,covmats,Xtest,ytest):
     # Inputs
