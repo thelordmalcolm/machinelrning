@@ -103,9 +103,10 @@ def qdaTest(means, covmats, Xtest, ytest):
         inverse[i] = inv(covmats[i])
         i += 1
     constants = np.empty(kClass)
+    const = sqrt(np.power((2 * np.pi), Xtest.shape[1]))
     i = 0
     while i < (kClass):
-        constants[i] = 1 / (sqrt(np.power((2 * np.pi), Xtest.shape[1])) * sqrt(det(covmats[i])))
+        constants[i] = 1 / const * sqrt(det(covmats[i]))
         i += 1
     i = 0
     while i < (Xtest.shape[0]):
@@ -118,7 +119,7 @@ def qdaTest(means, covmats, Xtest, ytest):
             j += 1
         pred = max(plist)
         pred = int(plist.index(pred))
-        if (pred == int(ytest[i]) - 1):
+        if (pred == ytest[i] - 1):
             acc += 1
         ypred[i] = pred
         i += 1
@@ -137,8 +138,7 @@ def learnOLERegression(X, y):
     # returns the dotrabs the dot product of inverse of
     transposeX = np.dot(X.transpose(), X)
     transposeY = np.dot(X.transpose(), y)
-    w = np.dot(np.linalg.inv(transposeX), transposeY)
-    #print(w)
+    w = np.dot(inv(transposeX), transposeY)
     return w
 
 
@@ -153,8 +153,7 @@ def learnRidgeRegression(X, y, lambd):
     # IMPLEMENT THIS METHOD
     id = np.identity(X.shape[1])
     id = lambd*id
-    w = np.dot(np.linalg.inv(np.dot(X.transpose(), X) + id), np.dot(X.transpose(), y))
-    #print(w)
+    w = np.dot(inv(np.dot(X.transpose(), X) + id), np.dot(X.transpose(), y))
     return w
 
 
@@ -168,12 +167,20 @@ def testOLERegression(w, Xtest, ytest):
 
     # IMPLEMENT THIS METHOD
 
-    #mse = np.sqrt(np.sum(np.square(ytest - np.dot(Xtest, w)))/Xtest.shape[0])
+    #mse = np.sqrt(np.sum(np.square(ytest - np.dot(XTest, w)))/Xtest.shape[0])
 
     somew = w.reshape((w.shape[0], 1))
     newW = np.sum(np.square((ytest - np.dot(Xtest, somew))))
     mse = (1.0 / Xtest.shape[0]) * (newW)
     return mse
+
+
+def squareandsum(val):
+    sqr = np.square(val)
+    summ = np.sum(sqr)
+    sqroot = np.sqrt(summ)
+    return sqrt
+
 
 def regressionObjVal(w, X, y, lambd):
     # compute squared error (scalar) and gradient of squared error with respect
@@ -181,7 +188,7 @@ def regressionObjVal(w, X, y, lambd):
     # lambda
 
     # IMPLEMENT THIS METHOD
-    error = np.sum(np.square((y - np.dot(X, w.reshape((w.shape[0], 1))))))/2 + (0.5*lambd*np.sum(np.square(w)))
+    error = np.sum(np.square((y - np.dot(X, w.reshape((w.shape[0], 1))))))
     gradience = np.dot(-1, np.dot(X.transpose(), (y - np.dot(X, w.reshape((w.shape[0], 1))))))
     error_grad = gradience[:, 0] + np.dot(lambd, w)
     return error, error_grad
@@ -195,13 +202,9 @@ def mapNonLinear(x, p):
     # Xd - (N x (d+1))
     # IMPLEMENT THIS METHOD
     Xd = np.ones((x.shape[0], p + 1))
-    i = 0
-    while i < (x.shape[0]):
-        j = 0
-        while j < (p+1):
-            Xd[i][j] = np.power(x[i], j)
-            j +=1
-        i += 1
+    for i in range(1, p + 1):
+        Xd[:, i] = pow(x, i)
+
     return Xd
 
 
