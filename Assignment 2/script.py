@@ -103,10 +103,9 @@ def qdaTest(means, covmats, Xtest, ytest):
         inverse[i] = inv(covmats[i])
         i += 1
     constants = np.empty(kClass)
-    const = sqrt(np.power((2 * np.pi), Xtest.shape[1]))
     i = 0
     while i < (kClass):
-        constants[i] = 1 / const * sqrt(det(covmats[i]))
+        constants[i] = 1 / (sqrt(np.power((2 * np.pi), Xtest.shape[1])) * sqrt(det(covmats[i])))
         i += 1
     i = 0
     while i < (Xtest.shape[0]):
