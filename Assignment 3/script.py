@@ -124,7 +124,7 @@ def blrObjFunction(initialWeights, *args):
     theta = sigmoid(z)
 
     theta = theta.reshape(n_data,1)
-    err = (-n_data**-(1)) * np.sum((labeli * np.log(theta)) + ((1-labeli) * np.log(1-theta)))
+    error = (-n_data**-(1)) * np.sum((labeli * np.log(theta)) + ((1-labeli) * np.log(1-theta)))
 
     temp = theta -labeli
     temp2 = temp*train_data
