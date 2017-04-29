@@ -4,21 +4,21 @@ from scipy.optimize import minimize
 
 
 def preprocess():
-    """ 
+    """
      Input:
      Although this function doesn't have any input, you are required to load
      the MNIST data set from file 'mnist_all.mat'.
 
      Output:
-     train_data: matrix of training set. Each row of train_data contains 
+     train_data: matrix of training set. Each row of train_data contains
        feature vector of a image
      train_label: vector of label corresponding to each image in the training
        set
-     validation_data: matrix of training set. Each row of validation_data 
+     validation_data: matrix of training set. Each row of validation_data
        contains feature vector of a image
-     validation_label: vector of label corresponding to each image in the 
+     validation_label: vector of label corresponding to each image in the
        training set
-     test_data: matrix of training set. Each row of test_data contains 
+     test_data: matrix of training set. Each row of test_data contains
        feature vector of a image
      test_label: vector of label corresponding to each image in the testing
        set
@@ -94,11 +94,11 @@ def blrObjFunction(initialWeights, *args):
     its gradient.
 
     Input:
-        initialWeights: the weight vector (w_k) of size (D + 1) x 1 
+        initialWeights: the weight vector (w_k) of size (D + 1) x 1
         train_data: the data matrix of size N x D
         labeli: the label vector (y_k) of size N x 1 where each entry can be either 0 or 1 representing the label of corresponding feature vector
 
-    Output: 
+    Output:
         error: the scalar value of error function of 2-class logistic regression
         error_grad: the vector of size (D+1) x 1 representing the gradient of
                     error function
@@ -115,21 +115,39 @@ def blrObjFunction(initialWeights, *args):
     ##################
     # HINT: Do not forget to add the bias term to your input data
 
+    initialWeights = initialWeights.reshape(n_features+1,1)
+    b_in = np.ones((np.array(n_data),1))
+    train_data = np.append(b_in, train_data,1)
+
+    z = np.dot(train_data, initialWeights)
+
+    theta = sigmoid(z)
+
+    theta = theta.reshape(n_data,1)
+    err = (-n_data**-(1)) * np.sum((labeli * np.log(theta)) + ((1-labeli) * np.log(1-theta)))
+
+    temp = theta -labeli
+    temp2 = temp*train_data
+    temp3 = np.sum(temp2,axis=0)
+    error_grad = temp3/n_data
+    error_grad = error_grad.reshape(error_grad.shape[0],1)
+    error_grad = error_grad.flatten()
+
     return error, error_grad
 
 
 def blrPredict(W, data):
     """
-     blrObjFunction predicts the label of data given the data and parameter W 
+     blrObjFunction predicts the label of data given the data and parameter W
      of Logistic Regression
-     
+
      Input:
-         W: the matrix of weight of size (D + 1) x 10. Each column is the weight 
+         W: the matrix of weight of size (D + 1) x 10. Each column is the weight
          vector of a Logistic Regression classifier.
          X: the data matrix of size N x D
-         
-     Output: 
-         label: vector of size N x 1 representing the predicted label of 
+
+     Output:
+         label: vector of size N x 1 representing the predicted label of
          corresponding feature vector given in data matrix
 
     """
