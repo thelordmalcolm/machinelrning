@@ -284,7 +284,6 @@ plt.title('MSE for Train Data')
 plt.subplot(1, 2, 2)
 plt.plot(lambdas, mses3)
 plt.title('MSE for Test Data')
-
 plt.show()
 # Problem 4
 k = 101
