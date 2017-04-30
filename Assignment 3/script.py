@@ -2,6 +2,7 @@ import numpy as np
 from scipy.io import loadmat
 from scipy.optimize import minimize
 from sklearn.svm import SVC
+import pickle
 
 
 def preprocess():
@@ -265,6 +266,10 @@ print('\n Testing set Accuracy:' + str(100 * np.mean((predicted_label == test_la
 """
 Script for Support Vector Machine
 """
+
+f1 = open('params.pickle', 'wb')
+pickle.dump(W, f1)
+f1.close()
 
 
 print('\n\n--------------SVM-------------------\n\n')
