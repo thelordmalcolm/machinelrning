@@ -115,25 +115,29 @@ def blrObjFunction(initialWeights, *args):
     ##################
     # HINT: Do not forget to add the bias term to your input data
 
-    initialWeights = initialWeights.reshape(n_features+1,1)
-    b_in = np.ones((np.array(n_data),1))
-    train_data = np.append(b_in, train_data,1)
+    bias = np.ones((n_data, 1))
+    data_bias = np.concatenate((train_data, bias), axis=1)
+    weight = np.reshape(initialWeights, (n_features + 1, 1))
+    db_dot_w = np.dot(data_bias, weight)
+    theta_n = sigmoid(db_dot_w)
+    try:
+        lg = np.log(theta_n)
+    except:
+        lg = 0
+    theta = np.array(bias) - np.array(theta_n)
+    lg_t = np.log(theta)
+    lbl_dot_lg = np.dot(np.transpose(labeli), lg)
+    bias_diff_lbl = np.array(bias) - np.array(labeli)
+    bias_df_dot_lgt = np.dot(bias_diff_lbl.transpose(), lg_t)
+    e = np.add(lbl_dot_lg, bias_df_dot_lgt)
+    error = (-1*np.sum(e)) / n_data
 
-    z = np.dot(train_data, initialWeights)
+    theta_diff_lbl = np.subtract(theta_n, labeli)
+    datab_dot_thetadiff = np.dot(data_bias.transpose(), theta_diff_lbl)
 
-    theta = sigmoid(z)
+    error_grad = datab_dot_thetadiff / n_data
 
-    theta = np.reshape(theta,(n_data,1))
-    error = (-n_data**-(1)) * np.sum((labeli * np.log(theta)) + ((1-labeli) * np.log(1-theta)))
-
-    temp = theta - labeli
-    temp2 = temp*train_data
-    temp3 = np.sum(temp2,axis=0)
-    error_grad = temp3/n_data
-    error_grad = error_grad.reshape(error_grad.shape[0],1)
-    error_grad = error_grad.flatten()
-
-    return error, error_grad
+    return error, error_grad.flatten()
 
 
 def blrPredict(W, data):
@@ -157,15 +161,16 @@ def blrPredict(W, data):
     # YOUR CODE HERE #
     ##################
     # HINT: Do not forget to add the bias term to your input data
-    v = np.ones((data.shape[0], 1))
-    concat_v_and_data = np.concatenate((data, v), axis=1)
-    dot_concat_and_w = np.dot(concat_v_and_data, W)
-    theta = sigmoid(dot_concat_and_w)
-    j = 0
-    while j < label.shape[0]:
-        temp = np.amax(theta[i])
-        theta[i] = temp
-        j += 1
+    bias = np.ones((data.shape[0], 1))
+    data_bias = np.concatenate((data, bias), axis=1)
+    dot_data_weight = np.dot(data_bias, W)  # 50000*716 by 716*1
+
+    theta_n = sigmoid(dot_data_weight)
+    i = 0
+    while i < (label.shape[0]):
+        temp = np.argmax(theta_n[i])
+        label[i] = temp
+        i += 1
     return label
 
 
