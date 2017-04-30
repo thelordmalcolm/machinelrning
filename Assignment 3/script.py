@@ -107,8 +107,6 @@ def blrObjFunction(initialWeights, *args):
 
     n_data = train_data.shape[0]
     n_features = train_data.shape[1]
-    error = 0
-    error_grad = np.zeros((n_features + 1, 1))
 
     ##################
     # YOUR CODE HERE #
