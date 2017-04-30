@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.io import loadmat
 from scipy.optimize import minimize
+from sklearn.svm import SVC
 
 
 def preprocess():
@@ -265,11 +266,19 @@ print('\n Testing set Accuracy:' + str(100 * np.mean((predicted_label == test_la
 Script for Support Vector Machine
 """
 
+
 print('\n\n--------------SVM-------------------\n\n')
 ##################
 # YOUR CODE HERE #
 ##################
 
+for i in range(10,110,10):
+    agh = SVC(c=i,kernel='rbf');
+    agh.fit(train_data,train_label.flatten());
+
+    accuracy = agh.score(train_data,train_label.flatten());
+    accuracy = agh.score(validation_data, validation_label.flatten());
+    accuracy = agh.score(test_data,test_label.flatten());
 
 """
 Script for Extra Credit Part
