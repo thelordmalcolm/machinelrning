@@ -164,7 +164,7 @@ def blrPredict(W, data):
     j = 0
     while j < label.shape[0]:
         temp = np.amax(theta[i])
-        theta[i] = temp
+        label[i] = temp
         j += 1
     return label
 
