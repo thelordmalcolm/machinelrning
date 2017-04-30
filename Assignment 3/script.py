@@ -272,13 +272,55 @@ print('\n\n--------------SVM-------------------\n\n')
 # YOUR CODE HERE #
 ##################
 
-for i in range(10,110,10):
-    agh = SVC(c=i,kernel='rbf');
-    agh.fit(train_data,train_label.flatten());
+'''linear kernal'''
+agh = SVC(kernel='linear');
+agh.fit(train_data, train_label.flatten())
+accuracy = agh.score(train_data, train_label.flatten());
+print('Accuracy for linear train data: {}%'.format(accuracy*100))
+accuracy = agh.score(validation_data, validation_label.flatten());
+print('Accuracy for the linear validation data: {}%'.format(accuracy*100))
+accuracy = agh.score(test_data,test_label.flatten());
+print('Accuracy for the linear test data: {}%'.format(accuracy*100))
 
-    accuracy = agh.score(train_data,train_label.flatten());
+'''Kernel RBF Gamma = 1.'''
+agh = SVC(kernel='rbf', gamma=1.);
+agh.fit(train_data, train_label.flatten())
+accuracy = agh.score(train_data, train_label.flatten());
+print('Accuracy for rbf, gamma = 1.0 train data: {}%'.format(accuracy*100))
+accuracy = agh.score(validation_data, validation_label.flatten());
+print('Accuracy for rbf, gamma = 1.0 validation data: {}%'.format(accuracy*100))
+accuracy = agh.score(test_data,test_label.flatten());
+print('Accuracy for rbf, gamma = 1.0 test data: {}%'.format(accuracy*100))
+
+'''Kernel RBF default'''
+agh = SVC(kernel='rbf', gamma=1.);
+agh.fit(train_data, train_label.flatten())
+accuracy = agh.score(train_data, train_label.flatten());
+print('Accuracy for RBF default train data: {}%'.format(accuracy*100))
+accuracy = agh.score(validation_data, validation_label.flatten());
+print('Accuracy for RBF default validation data: {}%'.format(accuracy*100))
+accuracy = agh.score(test_data,test_label.flatten());
+print('Accuracy for RBF default test data: {}%'.format(accuracy*100))
+
+'''Kernel RBF Varying C'''
+agh = SVC(c=1,kernel='rbf');
+agh.fit(train_data,train_label.flatten());
+accuracy = agh.score(train_data,train_label.flatten());
+print('Accuracy for RBF C = {} train data: {}%'.format(1, accuracy*100))
+accuracy = agh.score(validation_data, validation_label.flatten());
+print('Accuracy for RBF C = {} validation data: {}%'.format(1, accuracy*100))
+accuracy = agh.score(test_data,test_label.flatten());
+print('Accuracy for RBF C = {} test data: {}%'.format(1, accuracy*100))
+
+for i in range(10,110,10):
+    agh = SVC(c=i, kernel='rbf');
+    agh.fit(train_data, train_label.flatten());
+    accuracy = agh.score(train_data, train_label.flatten());
+    print('Accuracy for RBF C = {} train data: {}%'.format(i, accuracy * 100))
     accuracy = agh.score(validation_data, validation_label.flatten());
-    accuracy = agh.score(test_data,test_label.flatten());
+    print('Accuracy for RBF C = {} validation data: {}%'.format(i, accuracy * 100))
+    accuracy = agh.score(test_data, test_label.flatten());
+    print('Accuracy for RBF C = {} test data: {}%'.format(i, accuracy * 100))
 
 """
 Script for Extra Credit Part
