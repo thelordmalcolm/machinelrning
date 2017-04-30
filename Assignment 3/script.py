@@ -121,10 +121,10 @@ def blrObjFunction(initialWeights, *args):
 
     theta = sigmoid(z)
 
-    theta = theta.reshape(n_data,1)
+    theta = np.reshape(theta,(n_data,1))
     error = (-n_data**-(1)) * np.sum((labeli * np.log(theta)) + ((1-labeli) * np.log(1-theta)))
 
-    temp = theta -labeli
+    temp = theta - labeli
     temp2 = temp*train_data
     temp3 = np.sum(temp2,axis=0)
     error_grad = temp3/n_data
@@ -155,7 +155,15 @@ def blrPredict(W, data):
     # YOUR CODE HERE #
     ##################
     # HINT: Do not forget to add the bias term to your input data
-
+    v = np.ones((data.shape[0], 1))
+    concat_v_and_data = np.concatenate((data, v), axis=1)
+    dot_concat_and_w = np.dot(concat_v_and_data, W)
+    theta = sigmoid(dot_concat_and_w)
+    j = 0
+    while j < label.shape[0]:
+        temp = np.amax(theta[i])
+        theta[i] = temp
+        j += 1
     return label
 
 
