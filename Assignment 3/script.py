@@ -323,7 +323,7 @@ accuracy = agh.score(test_data,test_label.flatten());
 print('Accuracy for RBF C = {} test data: {}%'.format(1, accuracy*100))
 
 for i in range(10,110,10):
-    agh = SVC(c=i, kernel='rbf');
+    agh = SVC(C=i, kernel='rbf');
     agh.fit(train_data, train_label.flatten());
     accuracy = agh.score(train_data, train_label.flatten());
     print('Accuracy for RBF C = {} train data: {}%'.format(i, accuracy * 100))
