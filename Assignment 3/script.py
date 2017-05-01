@@ -303,7 +303,7 @@ accuracy = agh.score(test_data,test_label.flatten());
 print('Accuracy for rbf, gamma = 1.0 test data: {}%'.format(accuracy*100))
 
 '''Kernel RBF default'''
-agh = SVC(kernel='rbf', gamma=1.);
+agh = SVC(kernel='rbf', gamma='auto');
 agh.fit(train_data, train_label.flatten())
 accuracy = agh.score(train_data, train_label.flatten());
 print('Accuracy for RBF default train data: {}%'.format(accuracy*100))
